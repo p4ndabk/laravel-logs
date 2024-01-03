@@ -13,6 +13,7 @@ class BaseModel extends Model
         });
 
         static::updated(function ($model, $event = 'updated') {
+            self::saveLog(self::formatLog($event, $model));                      
         });
 
         static::deleted(function ($model, $event = 'deleted') {
