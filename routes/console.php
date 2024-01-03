@@ -25,9 +25,9 @@ Artisan::command('created_products', function () {
 });
 
 Artisan::command('updated_products', function () {
-    Product::query()->find(3)->update(['name' => 'updated']);
+    Product::query()->first()->update(['name' => 'updated']);
 });
 
 Artisan::command('deleted_products', function () {
-    Product::query()->find(3)->delete();
+    Product::query()->first()->delete();
 });
