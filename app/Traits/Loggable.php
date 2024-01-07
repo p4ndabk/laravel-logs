@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\Log;
+
 trait Loggable
 {
     protected static function bootLoggable(): void
@@ -22,7 +24,7 @@ trait Loggable
     private static function formatLog($event, $model)
     {
         return [
-            'user_id' => auth()->id(), // Pega o ID do usuário autenticado
+            'user_id' => auth()->id() ?? null,
             'event_type' => $event,
             'model_id' => $model->getKey(),
             'table_name' => $model->getTable(),
@@ -34,7 +36,7 @@ trait Loggable
 
     private static function saveLog($data)
     {
-        dump($data);
+        Log::create($data);
     }
 
     private static function getModelDiff($model)
