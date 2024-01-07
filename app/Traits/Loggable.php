@@ -36,7 +36,11 @@ trait Loggable
 
     private static function saveLog($data)
     {
-        Log::create($data);
+        try {
+            Log::create($data);
+        } catch (\Exception $e) {
+            Log::debug('error' . $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine());
+        }       
     }
 
     private static function getModelDiff($model)
