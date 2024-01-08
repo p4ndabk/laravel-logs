@@ -6,19 +6,23 @@ use Illuminate\Support\Facades\Log as FacadesLog;
 
 class LoggableObserver
 {
+    const EVENT_CREATED = 'created';
+    const EVENT_UPDATED = 'updated';
+    const EVENT_DELETED = 'deleted';
+
     public function created($model)
     {
-        self::saveLog(self::formatLog('created', $model));
+        self::saveLog(self::formatLog(self::EVENT_CREATED, $model));
     }
 
     public function updated($model)
     {
-        self::saveLog(self::formatLog('updated', $model));
+        self::saveLog(self::formatLog(self::EVENT_UPDATED, $model));
     }
 
     public function deleted($model)
     {
-        self::saveLog(self::formatLog('deleted', $model));
+        self::saveLog(self::formatLog(self::EVENT_DELETED, $model));
     }
 
     private static function formatLog($event, $model)
