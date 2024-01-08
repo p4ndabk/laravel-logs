@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Loggable;
+use App\Observers\LoggableObserver;
 
 class BaseModel extends Model
 {
-    use Loggable;
+    public static function boot()
+    {
+        parent::boot();
+
+        static::observe(LoggableObserver::class);
+    }
 }

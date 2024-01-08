@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Traits;
-
+namespace App\Observers;
 use App\Models\Log;
+use Illuminate\Support\Facades\Log as FacadesLog;
 
-trait Loggable
+class LoggableObserver
 {
-    protected static function bootLoggable(): void
+    public function created($model)
     {
-        static::created(function ($model) {
-            self::saveLog(self::formatLog('created', $model));
-        });
+        self::saveLog(self::formatLog('created', $model));
+    }
 
-        static::updated(function ($model) {
-            self::saveLog(self::formatLog('updated', $model));
-        });
+    public function updated($model)
+    {
+        self::saveLog(self::formatLog('updated', $model));
+    }
 
-        static::deleted(function ($model) {
-            self::saveLog(self::formatLog('deleted', $model));
-        });
+    public function deleted($model)
+    {
+        self::saveLog(self::formatLog('deleted', $model));
     }
 
     private static function formatLog($event, $model)
@@ -39,7 +39,7 @@ trait Loggable
         try {
             Log::create($data);
         } catch (\Exception $e) {
-            Log::debug('error' . $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine());
+            FacadesLog::debug('error' . $e->getMessage() . '|' . $e->getFile() . '|' . $e->getLine());
         }       
     }
 
