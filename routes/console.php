@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -17,3 +18,16 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+
+Artisan::command('created_products', function () {
+    Product::factory()->create();
+});
+
+Artisan::command('updated_products', function () {
+    Product::query()->first()->update(['name' => 'updated']);
+});
+
+Artisan::command('deleted_products', function () {
+    Product::query()->first()->delete();
+});
