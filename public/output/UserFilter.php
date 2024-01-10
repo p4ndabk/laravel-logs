@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Validator as ValidatorBuilder;
 
-class ProductsFilter extends AbstractFilter
+class UserFilter extends AbstractFilter
 {
     public function validate(): Validator
     {

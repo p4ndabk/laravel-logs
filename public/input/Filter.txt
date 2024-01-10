@@ -1,0 +1,17 @@
+<?php 
+
+namespace App\Filters;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Validator as ValidatorBuilder;
+
+class {{class_name}} extends AbstractFilter
+{
+    public function validate(): Validator
+    {
+        return ValidatorBuilder::make($this->values, {{validator}});
+    }
+
+{{apply}}
+}
