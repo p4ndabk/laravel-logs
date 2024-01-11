@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(
+            \App\Domain\Cep\CepInterface::class,
+            \App\Domain\Cep\ViaCep::class
+        );    
     }
 }
