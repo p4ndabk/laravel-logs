@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(
+            \App\Domain\EmailInterface::class,
+            \App\Domain\PandaEmailService::class
+        );
     }
 }

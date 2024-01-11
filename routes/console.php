@@ -31,3 +31,8 @@ Artisan::command('updated_products', function () {
 Artisan::command('deleted_products', function () {
     Product::query()->first()->delete();
 });
+
+Artisan::command('send_email', function () {
+    $emailService = app(\App\Domain\EmailInterface::class);
+    $emailService->sendEmail("David@gmail.com", "Hello David");
+});
