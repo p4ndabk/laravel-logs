@@ -35,6 +35,43 @@ class ProductServicesTest extends TestCase
         $this->assertCount(1, $products);
     }
 
+    public function test_filter_products_name_id(): void
+    {
+        Product::factory()->count(2)->create();
+
+        Product::factory()->count(1)->create([
+            'name' => 'Product 1'
+        ]);
+
+        Product::factory()->count(1)->create([
+            'name' => 'Product 2'
+        ]);
+
+        $products = $this->service->getProducts(['name' => 'product']);
+
+        $this->assertCount(2, $products);
+    }
+
+    //create test price
+    public function test_filter_products_price_id(): void
+    {
+        Product::factory()->count(2)->create([
+            'price' => 9
+        ]);
+
+        Product::factory()->count(1)->create([
+            'price' => 10
+        ]);
+
+        Product::factory()->count(1)->create([
+            'price' => 20
+        ]);
+
+        $products = $this->service->getProducts(['price' => 10]);
+
+        $this->assertCount(2, $products);
+    }
+
     public function test_filter_products_validated_string_id(): void
     {
         $this->expectException(ValidationException::class);

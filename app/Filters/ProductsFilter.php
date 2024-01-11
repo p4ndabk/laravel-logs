@@ -12,17 +12,23 @@ class ProductsFilter extends AbstractFilter
     {
         return ValidatorBuilder::make($this->values, [
            'id' => 'nullable|int',
-           'name' => 'nullable|string'
+           'name' => 'nullable|string',
+           'price' => 'nullable|numeric'
         ]);
     }
 
-   public function applyId(Builder $builder, int $id)    
+    public function applyId(Builder $builder, $value)    
     {       
-        $builder->where('id', $id);  
+        $builder->where('id', '=', $value);  
     }
 
-   public function applyName(Builder $builder, string $id)    
+    public function applyName(Builder $builder, $value)    
     {       
-        $builder->where('name', $id);  
+        $builder->where('name', 'like', '%'.$value.'%');  
+    }
+
+    public function applyPrice(Builder $builder, $value)    
+    {       
+        $builder->where('price', '>=', $value);  
     }
 }

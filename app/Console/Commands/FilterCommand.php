@@ -13,7 +13,7 @@ class FilterCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:filter {filename}';
+    protected $signature = 'make:filter {name}';
 
     /**
      * The console command description.
@@ -28,16 +28,14 @@ class FilterCommand extends Command
     public function handle()
     {
         $filters = [
-            'id' => 'nullable|int',
-            'name' => 'nullable|string',
+            'id' => 'nullable|int|=',
+            'name' => 'nullable|string|like',
+            'price' => 'nullable|numeric|>=',
         ];
 
-        $name = $this->argument('filename');
-
+        $name = $this->argument('name');
         $content = $this->openFile();
-
         $content = $this->replaceContent($content, $name, $filters);
-
         $this->createFile($name, $content);
     }
 
@@ -64,6 +62,11 @@ class FilterCommand extends Command
         $validatorArray = [];
 
         foreach ($filters as $key => $value) {
+            $lastBarPosition = strrpos($value, '|');
+            if ($lastBarPosition !== false) {
+                $value = substr($value, 0, $lastBarPosition);
+            }
+
             $validatorArray[] = "           '$key' => '$value'";
         }
 
@@ -78,9 +81,18 @@ class FilterCommand extends Command
         $applyArray = [];
 
         foreach ($filters as $key => $value) {
-            $applyArray[] = "   public function apply".ucfirst($key)."(Builder \$builder, ".Str::after($value, '|')." \$id)    
+            $params = explode('|', $value)[2];
+            switch ($params) {
+                case 'like':
+                    $params = "'".explode('|', $value)[2]. "', " . "'%'.\$value.'%'";
+                break;
+                default:
+                    $params = "'".explode('|', $value)[2]. "'" . ", \$value";
+            }
+
+            $applyArray[] = "    public function apply".ucfirst($key)."(Builder \$builder, \$value)    
     {       
-        \$builder->where('$key', \$id);  
+        \$builder->where('$key', $params);  
     }";
         }
 
@@ -90,6 +102,6 @@ class FilterCommand extends Command
     public function createFile (string $name, string $content): void
     {
         $filename = ucfirst($name)."Filter.php";
-        File::put(public_path("output/".$filename), $content);
+        File::put(app_path("Filters/".$filename), $content);
     }
 }
