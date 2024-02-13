@@ -1,8 +1,11 @@
 <?php
 
 use App\Models\Product;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +34,34 @@ Artisan::command('updated_products', function () {
 Artisan::command('deleted_products', function () {
     Product::query()->first()->delete();
 });
+
+Artisan::command('check:db', function () {
+    Artisan::call('cache:clear');
+    $this->comment(env('DB_DATABASE'));
+    $this->comment(env('DB_HOST'));
+    $this->comment(env('DB_PORT'));
+    $this->comment(env('DB_USERNAME'));
+    $this->comment(env('DB_PASSWORD'));
+    dd(DB::connection()->getPdo());    
+})->describe('Check db');
+
+//create commands check db test
+Artisan::command('check:db-test', function () {
+    Artisan::call('cache:clear');
+    $this->comment(env('DB_TEST_DATABASE'));
+    $this->comment(env('DB_TEST_HOST'));
+    $this->comment(env('DB_TEST_PORT'));
+    $this->comment(env('DB_TEST_USERNAME'));
+    $this->comment(env('DB_TEST_PASSWORD'));
+    dd(DB::connection()->getPdo());    
+})->describe('Check db');
+
+//create commands check db test
+Artisan::command('exception:auth', function () {
+   // throw new Exception('error exception');
+    throw new AuthorizationException();
+});
+Artisan::command('exception:error', function () {
+    // throw new Exception('error exception');
+     throw new Exception('test error exception');
+ });

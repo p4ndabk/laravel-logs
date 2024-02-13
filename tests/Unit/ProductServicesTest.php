@@ -20,7 +20,6 @@ class ProductServicesTest extends TestCase
     public function test_get_all_products(): void
     {
         Product::factory()->count(2)->create();
-
         $products = $this->service->getProducts();
 
         $this->assertCount(2, $products);
@@ -28,11 +27,10 @@ class ProductServicesTest extends TestCase
 
     public function test_filter_products_by_id(): void
     {
-        Product::factory()->count(2)->create();
+        $products = Product::factory()->count(4)->create()->pluck('id')->toArray();
 
-        $products = $this->service->getProducts(['id' => 1]);
-
-        $this->assertCount(1, $products);
+        $products = $this->service->getProducts(['id' => [$products[0], $products[1]]]);
+        $this->assertCount(2, $products);
     }
 
     public function test_filter_products_name_id(): void

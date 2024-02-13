@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Str;
 
 class Handler extends ExceptionHandler
 {
@@ -21,10 +23,24 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function report(Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        $statusCode = 500;
+        $error = true;
+        $message = null;
+        $uuid = Str::uuid();
+
+        if ($exception instanceof AuthorizationException) {
+            $statusCode = 403;
+            $message = 'not authorized';
+        }
+        if ($exception instanceof \Exception) {
+            $statusCode = 400;
+            $message = $exception->getMessage() ?? 'error exception';
+        }
+
+        dd($statusCode,$uuid, $error, $exception->getMessage(), $message);
+    
+        parent::report($exception);
     }
 }

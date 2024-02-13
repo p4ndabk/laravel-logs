@@ -28,7 +28,7 @@ class MakeFilterCommand extends Command
     public function handle()
     {
         $filters = [
-            'id' => 'nullable|int|=',
+            'id' => 'nullable|int|in',
             'name' => 'nullable|string|like',
             'price' => 'nullable|numeric|>=',
         ];
